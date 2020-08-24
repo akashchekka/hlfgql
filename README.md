@@ -367,6 +367,8 @@ And in index.js these lines have to be added.
 
 By implementing this we can invoke transactions.
 
+![invoking](invoke.png)
+
 ## PROS
 
 Using GraphQL you can expose just one endpoint and make all requests using that. Also as we are able to query data as we want, we can reduce the weight of chaincode query functions. Also GraphQL was developed by Facebook for its internal purposes and is opensource. So we can expect good improvements.
