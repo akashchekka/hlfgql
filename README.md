@@ -1,16 +1,16 @@
-Hello there mates. Hope everyone's safe out there. This is Akash, working as Systems Engineer in TCS where I do Security Analysis for applications. Keeping that aside, I am a blockchain developer working on Hyperledger Fabric.
+Hello there mates. Hope everyone's safe out there. This is Akash, working as Systems Engineer in TCS where I do Security Analysis for applications. Apart from that, I am a blockchain developer working on Hyperledger Fabric.
 
-Chaincode is the smart contract that we write to implement business logic. Inorder to make the users to interact with chaincode we have cli tool and to access from various other applications we have many SDKs written in many languages. When we have end-to-end application, one way we interact with fabric network is using APIs. Here in this article I would like to show a new way of interacting with fabric network using GraphQL and how we can make Ultra-Rich queries using the same. I will give some basic introduction on what graphql is. I assume people reading this article has worked with hyperledger fabric atleast as a beginner.
+Chaincode is the smart contract that we write to implement business logic in hyperledger fabric. Inorder to let the users interact with chaincode, we have cli tool and to access from various other applications, we have many SDKs written in many languages. In the case of end-to-end applications, one way we interact with fabric network is using APIs. In this article I would like to show a new way of interacting with fabric network using GraphQL and how we can make Ultra-Rich queries using the same. I will give basic introduction about graphql. I assume people reading this article has worked with hyperledger fabric atleast as a beginner.
 
 ## Scenario
 Say for example we have a schema for user: Username, Email, Contact, Gender. If we need only Username and Gender, we need to write an API for returning those two. If we need email and contact, we need to write an API for that. And if we want all together there will be another API for that. But with GraphQL we can get whatever we need by just exposing one API. Lets see how!!
 
 ## What is GraphQL?
-GraphQL is an open-source data query and manipulation language for APIs and a runtime for fulfilling queries with existing data. With GraphQL we can specify what exactly we need as part of query. GraphQL solves both over-fetching and under-fetching issues by allowing the client to request only the needed data. Since the client now has more freedom in the fetched data, development is much faster with GraphQL.
+GraphQL is an open-source data query and manipulation language for APIs and a runtime for fulfilling queries with existing data. With GraphQL we can specify what exactly we need as part of query. GraphQL solves both over-fetching and under-fetching issues by allowing the client to request only the required data. Since the client now has more liberty for the fetched data, development is much faster with GraphQL.
 
 ## SETUP
 
-For this article I made use of fabcar that is part of fabric-samples provided by hyperledger fabric. In this fabcar chaincode, we have a schema for CAR with following fields: Make, Model, Colour, Model. Also we have invoke.js and query.js which uses fabric-network npm module to interact with peers and orderers. I will be making some modifications to query and invoke files to make it useful as required. Let's clear the network and remove stopped containers, prune the docker volume and network so that there wont be any hurdles in the process. To perform this, execute below script in fabcar directory.
+For this article I made use of fabcar that is part of fabric-samples provided by hyperledger fabric. In this fabcar chaincode, we have a schema for CAR with following fields: Make, Model, Colour, Model. Also we have invoke.js and query.js which uses fabric-network npm module to interact with peers and orderers. I will make some modifications to query and invoke files to make it useful as required. Let's clear the network and remove stopped containers, prune the docker volume and network so that there won't be any hurdles in the process. To perform this, execute below script in fabcar directory.
 
 ```sh
 $ ./networkDown.sh
@@ -31,7 +31,7 @@ $ mkdir gql
 $ cd gql
 $ npm init
 ```
-Give all the necessary details. Install all the necessary modules. Here we are writing an express application.
+Give all the necessary details. Install all the necessary modules. Here, we write an express application.
 
 ```sh
 $ npm i express express-graphql graphql-tools fabric-network
@@ -123,7 +123,7 @@ const schema = makeExecutableSchema({
 });
 ```
 
-Here we have a typeDef type 'Car' with fields: make, model, colour, model. Also we specified type Query which implements two methods QueryCar which takes 'name' input and returns Car, QueryAllCars which returns array of Cars. Resolvers implemented the logic. We have to write query function which interacts with fabric network and gets our data. We shall make some minor modifications to the query script.
+Here we have a typeDef type 'Car' with fields: make, model, colour, model. Also we specified type 'Query' which implements two methods QueryCar which takes 'name' input and returns Car, QueryAllCars which returns array of Cars. Resolvers implemented the logic. We have to write query function which interacts with fabric network and gets our data. We shall make some minor modifications to the query script.
 
 ```js
 // query.js
@@ -166,7 +166,7 @@ module.exports = async function query(array) {
     }
 }
 ```
-This query function takes an array as input and evaluates transaction and returns the response.
+This query function takes an array as input, evaluates transaction and returns the response.
 
 ```js
 app.get('/', (_, res) => {
@@ -176,6 +176,7 @@ app.get('/', (_, res) => {
     graphiql: true,
 })));
 ```
+**NOTE**: graphiql should be set to 'false' in production.
 
 Here we are loading above written 'schema' to graphql server. Setting 'graphiql' to true gives you a UI to interact with graphql server. After writing all the code, index.js looks like this. Make sure you have the query.js in gql directory.
 
@@ -263,7 +264,7 @@ app.listen(PORT, () => console.log(`Running server on port http://localhost:${PO
 
 ```
 
-I have added this start script to package.json to compile the code using babel
+I have added this start script to package.json to compile the code.
 
 ```json
 "scripts": {
@@ -277,9 +278,7 @@ Run the code using this command in gql directory.
 $ npm start
 ```
 
-Now you can navigate to port in which you made your application to run. It looks like this. It is from here you can interact with graphql.
-
-**NOTE**: graphiql should be set to 'false' in production.
+Now you can navigate to port in which you made your application to run. It looks like this. From here you can interact with graphql.
 
 ![graphQL UI](graphqlUI.png)
 
@@ -287,7 +286,7 @@ Lets make a query to fetch all cars from fabric network and specify only make, m
 
 ![make-model-colour](query.png)
 
-Here we can see that only make, model and colour details are returned to UI. Lets make another query to fetch only model and colour.
+Here we can see that only make, model and colour details are returned to UI. Let's make another query to fetch only model and colour.
 
 ![model-colour](query2.png)
 
@@ -340,7 +339,7 @@ module.exports = async function invoke(array) {
 
 ```
 
-And in index.js these lines have to be added.
+And in index.js add these lines.
 
 ```js
 // in index.js
@@ -371,7 +370,7 @@ By implementing this we can invoke transactions.
 
 ## PROS
 
-Using GraphQL you can expose just one endpoint and make all requests using that. Also as we are able to query data as we want, we can reduce the weight of chaincode query functions. Also GraphQL was developed by Facebook for its internal purposes and is opensource. So we can expect good improvements.
+GraphQL helps you to expose just one endpoint and make all requests using that. Also as we can query data as we want, we can reduce the weight of chaincode query functions. Also GraphQL was developed by Facebook for its internal purposes and is an opensource. So, we can expect good improvements.
 
 ## CONS
 
@@ -379,4 +378,4 @@ Though we have many advantages, disadvantages need some attention. Making comple
 
 ## CONCLUSION
 
-This article conveys that GraphQL can help developers to write much good way while writing APIs. There can be many other ways but here I am presenting just one of such ways. We can see more advancements in the tech and also Hyperledger Fabric to make it as the best platform to development Blockchain applications. You can find source code for this [here](https://github.com/Akash76/fabric-graphql). Please feel free to fork the repo can make it useful for your applications.
+This article conveys that GraphQL can help developers find a better way while writing APIs for fabric application. There can be many other ways other than the one I've presented here. We can see more advancements in the tech and also Hyperledger Fabric to make it as the best platform to develop Blockchain applications. You can find source code for this [here](https://github.com/Akash76/fabric-graphql). Please feel free to fork the repo and make the best use out of it.
