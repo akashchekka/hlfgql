@@ -53,8 +53,6 @@ app.use(express.json());
 app.use((err, req, res, next) => {
     res.locals.error = err;
     if (err.status >= 100 && err.status < 600) {
-        res.status(err.status);
-    } else {
         res.status(500);
         res.json({
           error: err
@@ -197,8 +195,6 @@ app.use(express.json());
 app.use((err, req, res, next) => {
     res.locals.error = err;
     if (err.status >= 100 && err.status < 600) {
-        res.status(err.status);
-    } else {
         res.status(500);
         res.json({
           error: err
@@ -290,7 +286,11 @@ Here we can see that only make, model and colour details are returned to UI. Let
 
 ![model-colour](query2.png)
 
-Here we can see only model and colour details are returned to UI. By this you got an idea on how we can use graphql to make queries. One important point to note here is we are exposing only one endpoint '/graphql' and it is to this endpoint we are sending our request data.
+Here we can see only model and colour details are returned to UI. By this you got an idea on how we can use graphql to make queries. Lets query single car CAR1 and get only colour and model. We can observe the response as below
+
+![CAR1](query3.png)
+
+One important point to note here is we are exposing only one endpoint '/graphql' and it is to this endpoint we are sending our request data.
 
 In the same way we can write mutations to invoke CreateCar by using graphql. For that you need to add few lines to typeDef, resolver and modify invoke.js.
 
