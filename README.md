@@ -70,7 +70,7 @@ app.listen(PORT, () => console.log(`Running server on port localhost:${PORT}`));
 We have two things with which we can interact with GraphQL: Query and Mutation. Query is equivalent to GET method in REST and Mutation is equivalent to POST,PUT. We have 'typedefs' in graphql where we specify the schema for data and 'resolvers' where we write logic part as shown below. We import two modules namely express-graphql and graphql-tools.
 
 ```js
-// add this to query.js
+// add this to index.js
 import { graphqlHTTP } from 'express-graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 const query = require('./query')
